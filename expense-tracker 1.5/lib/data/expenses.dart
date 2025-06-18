@@ -52,25 +52,6 @@ final List<IconData> categoryIcons = [
 
 List<Map<String, Object>> histogramsInfo = [];
 
-void updateHistogramInfo() {
-  histogramsInfo.clear();
-
-  for (int index = 0; index != expensesCategory.length; index++) {
-    histogramsInfo.add({
-      "category": expensesCategory[index],
-      "expenseAmountPercent": computeExpenseTypePercent(
-        expensesTypeAmount[expensesCategory[index]]!,
-        totalExpensesAmount,
-      ),
-      "expenseAmount": expensesTypeAmount[expensesCategory[index]]!,
-      "histogramHeight": computeContainerHeight(
-        expensesTypeAmount[expensesCategory[index]]!,
-        maxExpense,
-        138,
-      ),
-    });
-  }
-}
 
 Map<String, Object> getExpensesInfo() {
   double maxExpense = 0;
