@@ -49,133 +49,137 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(label: Text("Title")),
-
-                maxLength: 50,
-
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Enter title";
-                  }
-
-                  return null;
-                },
-              ),
-
-              const SizedBox(height: 15.0),
-
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _amountController,
-                      decoration: InputDecoration(
-                        label: Text("Amount"),
-                        prefixText: "\$",
-                        prefixIconColor: Colors.grey,
-                      ),
-
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Enter price";
-                        }
-
-                        return null;
-                      },
-                    ),
+                  TextFormField(
+                    controller: _titleController,
+                    decoration: InputDecoration(label: Text("Title")),
+              
+                    maxLength: 50,
+              
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "Enter title";
+                      }
+              
+                      return null;
+                    },
                   ),
-
-                  const SizedBox(width: 100.0),
-
+              
+                  const SizedBox(height: 15.0),
+              
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _amountController,
+                          decoration: InputDecoration(
+                            label: Text("Amount"),
+                            prefixText: "\$",
+                            prefixIconColor: Colors.grey,
+                          ),
+              
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+              
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return "Enter price";
+                            }
+              
+                            return null;
+                          },
+                        ),
+                      ),
+              
+                      const SizedBox(width: 100.0),
+              
+                      Row(
+                        children: [
+                          Text(
+                            pickedDate.toString().substring(0, 11),
+                            style: TextStyle(fontSize: 16.0),
+                          ),
+                          IconButton(
+                            onPressed: _selectDate,
+                            icon: Icon(Icons.calendar_month, size: 30.0),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+              
+                  const SizedBox(height: 20.0),
+              
                   Row(
                     children: [
-                      Text(
-                        pickedDate.toString().substring(0, 11),
-                        style: TextStyle(fontSize: 16.0),
+                      DropdownButton(
+                        value: dropdownValue,
+                        items:
+                            dropdownItems.map((item) {
+                              return DropdownMenuItem(
+                                value: item,
+                                child: Text(item),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            dropdownValue = value as String;
+                          });
+                        },
                       ),
-                      IconButton(
-                        onPressed: _selectDate,
-                        icon: Icon(Icons.calendar_month, size: 30.0),
+              
+                      Expanded(child: SizedBox()),
+              
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+              
+                        
+                        child: Text("Cancel", style: TextStyle(fontSize: 16)),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            expensesList.add(
+                              Expense(
+                                title: _titleController.text,
+                                notFormattedDate: pickedDate,
+                                amount: double.parse(_amountController.text),
+                                category: stringToCategory[dropdownValue]!,
+                              ),
+                            );
+              
+                            expenseTypeSepareted[stringToCategory[dropdownValue]]!.add(expensesList.last);
+                          });
+              
+                          Navigator.pushNamed(context, "/expensesScreen");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(128, 204, 185, 231),
+                          shadowColor: Colors.transparent,
+                          minimumSize: Size(90.0, 55.0),
+                        ),
+                        child: Text(
+                          "Save Expenses",
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
-
-              const SizedBox(height: 20.0),
-
-              Row(
-                children: [
-                  DropdownButton(
-                    value: dropdownValue,
-                    items:
-                        dropdownItems.map((item) {
-                          return DropdownMenuItem(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        dropdownValue = value as String;
-                      });
-                    },
-                  ),
-
-                  Expanded(child: SizedBox()),
-
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-
-                    
-                    child: Text("Cancel", style: TextStyle(fontSize: 16)),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        expensesList.add(
-                          Expense(
-                            title: _titleController.text,
-                            notFormattedDate: pickedDate,
-                            amount: double.parse(_amountController.text),
-                            category: stringToCategory[dropdownValue]!,
-                          ),
-                        );
-
-                        expenseTypeSepareted[stringToCategory[dropdownValue]]!.add(expensesList.last);
-                      });
-
-                      Navigator.pushNamed(context, "/expensesScreen");
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(128, 204, 185, 231),
-                      shadowColor: Colors.transparent,
-                      minimumSize: Size(90.0, 55.0),
-                    ),
-                    child: Text(
-                      "Save Expenses",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
         ),
       ),
