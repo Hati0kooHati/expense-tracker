@@ -46,7 +46,7 @@ class _ExpensesState extends State<Expenses> {
         ],
       ),
 
-      body: mainContent,
+      body: SafeArea(child: mainContent),
     );
   }
 }
