@@ -26,6 +26,7 @@ class _ExpensesState extends State<Expenses> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         automaticallyImplyLeading: false,
         toolbarHeight: 80.0,
         backgroundColor: const Color.fromARGB(255, 28, 8, 99),
