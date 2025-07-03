@@ -10,3 +10,4 @@ New:
 2) When deleting expense changes is occuring immedeatly
 3) Now "+" buttons works correctly
 4) Code of the app is more readable
+5) Added animation in histogram
