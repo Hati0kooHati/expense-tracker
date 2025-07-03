@@ -12,9 +12,15 @@ final List<IconData> kCategoryIcons = [
   Icons.work,
 ];
 
-class Histogram extends ConsumerWidget {
+class Histogram extends ConsumerStatefulWidget {
   const Histogram({super.key});
 
+  @override
+  ConsumerState createState() => _HistogramState();
+}
+
+class _HistogramState extends ConsumerState<Histogram>
+    with TickerProviderStateMixin {
   void onPressedHistogram({
     required Category category,
     required BuildContext context,
@@ -46,8 +52,28 @@ class Histogram extends ConsumerWidget {
     );
   }
 
+  late final AnimationController _histogramBarAnimationController;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+
+    _histogramBarAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 700),
+    )..forward();
+
+    // _histogramBarAnimationController.forward();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _histogramBarAnimationController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
@@ -102,14 +128,32 @@ class Histogram extends ConsumerWidget {
                               );
                             },
 
-                            child: Container(
-                              height: histogram.value,
-                              width: 88.0,
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 144, 115, 193),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
+                            child: AnimatedBuilder(
+                              animation: _histogramBarAnimationController,
+                              builder: (context, child) {
+                                return SizedBox(
+                                  height: histogram.value,
+                                  child: FractionallySizedBox(
+                                    alignment: Alignment.bottomCenter,
+                                    heightFactor:
+                                        _histogramBarAnimationController.value,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: 88.0,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    144,
+                                    115,
+                                    193,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10.0),
+                                    topRight: Radius.circular(10.0),
+                                  ),
                                 ),
                               ),
                             ),
