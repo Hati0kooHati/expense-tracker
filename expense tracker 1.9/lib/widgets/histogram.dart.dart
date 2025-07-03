@@ -79,7 +79,7 @@ class _HistogramState extends ConsumerState<Histogram>
           style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20),
+          margin: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
           height: 230.0,
           decoration: BoxDecoration(
             gradient: LinearGradient(
