@@ -62,8 +62,6 @@ class _HistogramState extends ConsumerState<Histogram>
       vsync: this,
       duration: Duration(milliseconds: 700),
     )..forward();
-
-    // _histogramBarAnimationController.forward();
   }
 
   @override
